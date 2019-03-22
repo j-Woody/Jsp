@@ -59,7 +59,7 @@
 </style>
 </head>
 <body>
-<c:if test="${not empty mDto}">
+<c:if test="${not empty mDto || not empty admin}">
 	<c:redirect url="/main/main.jsp" />
 </c:if>
 <c:if test="${not empty errorMsg}">

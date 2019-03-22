@@ -3,6 +3,7 @@ package com.tj.px.serviceM;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.tj.px.dao.AdminDao;
 import com.tj.px.dao.MemberDao;
 import com.tj.px.service.Service;
 
@@ -13,13 +14,23 @@ public class MmEmailChkService implements Service {
 		// TODO Auto-generated method stub
 		String mEmail = request.getParameter("mEmail");
 		MemberDao dao = MemberDao.getInstance();
+		AdminDao adao = AdminDao.getInstance();
+		int result = adao.chkAdmin(mEmail);
+		if(result == adao.FAIL) {
 		
-		int result = dao.chkEmail(mEmail);
-	
-		if(result != dao.FAIL) {
-			request.setAttribute("emailMsg", "이미 등록된 아이디입니다.");
+		result = dao.chkEmail(mEmail);
+		
+			if(result != dao.FAIL) {
+				request.setAttribute("emailMsg", "이미 등록된 아이디입니다.");
+			}else {
+				request.setAttribute("emailMsg", "");
+			}
 		}else {
-			request.setAttribute("emailMsg", "");
+			if(result != adao.FAIL) {
+				request.setAttribute("emailMsg", "이미 등록된 아이디입니다.");
+			}else {
+				request.setAttribute("emailMsg", "");
+			}
 		}
 	}
 

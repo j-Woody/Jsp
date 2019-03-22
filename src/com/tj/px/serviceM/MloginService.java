@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.tj.px.dao.AdminDao;
 import com.tj.px.dao.MemberDao;
 import com.tj.px.dao.PaymentDao;
 import com.tj.px.dto.MemberDto;
@@ -22,7 +23,10 @@ public class MloginService implements Service {
 		PaymentDao pdao = PaymentDao.getInstance();
 		PaymentDto pdto = null;
 		HttpSession session= request.getSession();
-		int result = dao.login(mEmail, mPw);
+		AdminDao aDao = AdminDao.getInstance();
+		int result = aDao.chkAdmin(mEmail, mPw);
+		if(result == aDao.FAIL) {
+		result = dao.login(mEmail, mPw);
 		pdto = pdao.select(mEmail);
 			if(pdto != null) {
 				session.setAttribute("pcDto", pdto);
@@ -37,7 +41,10 @@ public class MloginService implements Service {
 		}else if(result==dao.FAIL) {
 			request.setAttribute("errorMsg", "아이디와 비밀번호를 확인해주세요.");
 		}
-		
+		}else {
+			session.setAttribute("admin", aDao);
+			System.out.println("관리자 로그인");
+		}
 	}
 
 }

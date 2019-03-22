@@ -24,6 +24,27 @@ function openProfile() {
 function closeProfile() {
     document.getElementById("profile").style.width="0";
 };
+$('document').ready(function () {
+	var i = 0;
+	$("#admin1").click(function () {
+		if(i%2==0){
+			document.getElementById("ul1").style.display="block";
+		}else{
+			document.getElementById("ul1").style.display="none";
+		}
+		i++;
+	});
+	var j=0;
+	$("#admin2").click(function () {
+		if(j%2==0){
+			document.getElementById("ul2").style.display="block";
+		}else{
+			document.getElementById("ul2").style.display="none";
+		}
+		j++;
+	});
+})
+
 </script>
     <style>
         *{
@@ -158,6 +179,14 @@ function closeProfile() {
             #logo{
             	height:50px;
             }
+            #ul1, #ul2{
+            	display: none;
+            	background-color: white;
+            }
+            #ul1 a, #ul2 a{
+            	font-size: 1em;
+            }
+           
     </style>
 </head>
 <body>
@@ -166,12 +195,12 @@ function closeProfile() {
             <li>
                 <a href="#" ><img src="${conPath }/mainImg/menu.png" alt="메뉴" height="30" id="openMenu" onclick="openMenu();" /></a>
             </li>
-            <c:if test="${not empty mDto}">
+            <c:if test="${not empty mDto || not empty admin}">
 		            <li>
 		                <a href="#" ><img src="${conPath }/memberImg/${mDto.mImage}" alt="프로필사진" height="30" id="openProfile" class="pimg" onclick="openProfile();"/></a>
 		            </li>
         	</c:if>
-        	 <c:if test="${empty mDto}">
+        	 <c:if test="${empty mDto && empty admin}">
             	 <li>
             	 	<a href="${conPath}/loginView.do" ><img src="${conPath }/mainImg/login.png" alt="로그인" height="30" id="openProfile" onclick="openProfile();"/></a>
 	            </li>
@@ -213,6 +242,29 @@ function closeProfile() {
             <a href="${conPath }/pModifyView.do">지불 정보 변경</a>
         </c:if>
         <a href="${conPath }/logout.do">로그아웃</a>
+    </c:if>
+    <c:if test="${not empty admin }">
+        <h1>관리자모드</h1>
+        <hr />
+        <a href="#" id="closeProfile" onclick="closeProfile();">x</a>
+      
+        <hr class="line" width="70%"/>
+       
+        <a href="#" id="admin1">회원관리▼</a>
+        	<div id = "ul1">
+        		<a href="">-회원 관리</a>
+        		<a href="">-정지회원 관리</a>
+        	</div>
+      
+        <a href="#"  id="admin2">프로젝트 관리▼</a>
+        	<div id="ul2">
+	        	<a href="">-프로젝트 전체보기</a>
+	        	<a href="">-프로젝트 검색</a>
+        	</div>
+        
+        <hr class="line" width="70%" /></li>
+        <a href="${conPath }/logout.do">로그아웃</a></li>
+        
     </c:if>
     </div>
 

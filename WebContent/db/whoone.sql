@@ -3,7 +3,7 @@ DROP TABLE BOARD;
 DROP TABLE PROJECT;
 DROP TABLE PAYMENT;
 DROP TABLE GETPROJECT;
-DROP TABLE ADMIN;
+DROP TABLE ADMIN CASCADE CONSTRAINTS;
 DROP TABLE SETPAY;
 
 
@@ -111,8 +111,7 @@ NOCACHE;
 
 CREATE TABLE ADMIN(
     AID VARCHAR2(20) PRIMARY KEY,
-    APW VARCHAR2(20) NOT NULL,
-    ANAME VARCHAR2(20) DEFAULT '���'
+    APW VARCHAR2(20) NOT NULL
 );
 
 CREATE TABLE NOTICE(
@@ -145,9 +144,9 @@ SELECT * FROM MEMBER WHERE MEMAIL = ? AND MPW=?;
 SELECT * FROM MEMBER WHERE MEMAIL = ?;
 --��ü�˻�
 SELECT * FROM (SELECT ROWNUM RN, A.* FROM (SELECT * FROM MEMBER ORDER BY MNAME)A) WHERE RN BETWEEN ? AND ?;
---Ű����˻�?(email,ename)
+--Ű����˻�??(email,ename)
 SELECT * FROM (SELECT ROWNUM RN, A.* FROM (SELECT * FROM MEMBER ORDER BY MNAME)A) WHERE MEMAIL LIKE '%'||?||'%' OR MNAME LIKE'%'||?||'%' AND RN BETWEEN ? AND ?;
---��й�ȣã��?
+--��й�ȣã��??
 SELECT * FROM MEMBER WHERE MEMAIL = ? AND MNAME = ?;
 
 
@@ -156,9 +155,9 @@ select * from PAYMENT where memail ='aa@11';
 commit;
 
 --�Ŀ�������
-INSERT INTO SETPAY VALUES(1,1,'������Ű��',10000,'�Ŀ� ���� �� �⺻��ǰ���?');
+INSERT INTO SETPAY VALUES(1,1,'������Ű��',10000,'�Ŀ� ���� �� �⺻��ǰ���??');
 
---�Ŀ��� ����Ǵ�? ������
+--�Ŀ��� ����Ǵ�?? ������
 INSERT INTO GETPROJECT VALUES(1,'test',1,10000);
 
 --�Ŀ��� Ȯ��
@@ -177,7 +176,7 @@ DELETE FROM PAYMENT WHERE PCNUM='1232-3232-2222-2222';
 
 
 ------------------------------------------------------------
---project���
+--project���?
 INSERT INTO PROJECT (PNO,PTITLE,PDATE,MEMAIL,PPAY,PCONTENT,PIMAGE,PCATEGORY,PACCOUNT,PBANKNAME,PACNAME)VALUES(PROJECT_SEQ.NEXTVAL,'123',?,?,?,?,?,?,?,?,?);
 
 --��ȸ������
@@ -185,10 +184,10 @@ UPDATE PROJECT SET PCNT=PCNT+1 WHERE PNO=10;
 --�Ŀ���û�� �Ŀ�������
 UPDATE PROJECT SET PNOW=PNOW+2000 WHERE PNO=1;
 --PROJECT����
-UPDATE PROJECT SET PCONTENT = 'CONTENT',PACCOUNT = '����',PBANKNAME = '�����' ,PACNAME = '������' WHERE PNO=1;
---����¡,5�����(��ü��½� ���)
+UPDATE PROJECT SET PCONTENT = 'CONTENT',PACCOUNT = '����',PBANKNAME = '�����?' ,PACNAME = '������' WHERE PNO=1;
+--����¡,5�����?(��ü��½�? ���?)
 SELECT * FROM (SELECT ROWNUM RN, A.* FROM(SELECT * FROM PROJECT ORDER BY PNO)A)WHERE RN BETWEEN ? AND ?;
---ī�װ� ���� ��ȸ�� TOP 3 ���
+--ī�װ� ���� ��ȸ�� TOP 3 ���?
 SELECT * FROM (SELECT ROWNUM RN, A.* FROM(SELECT * FROM PROJECT ORDER BY PCNT)A)WHERE PCATEGORY=? AND RN BETWEEN ? AND ?;
 -- ����
 DELETE FROM PROJECT WHERE PNO=1;
@@ -219,9 +218,9 @@ SELECT * FROM (SELECT ROWNUM RN, A.* FROM (SELECT *FROM BOARD ORDER BY BGROUP DE
 --�ϳ� ã�ƿ���
 SELECT * FROM BOARD WHERE BNO = 10;
 
---�˻����(TITLE)
+--�˻����?(TITLE)
 SELECT * FROM BOARD WHERE BTITLE LIKE '%'||?||'%' ;
---�˻����(MEMAIL)
+--�˻����?(MEMAIL)
 SELECT * FROM BOARD WHERE MEMAIL LIKE '%'||?||'%';
 
 --����
@@ -233,7 +232,7 @@ UPDATE BOARD SET BHIT = BHIT+1 WHERE BNO=10;
 --�� �����ϱ�
 DELETE FROM BOARD WHERE BNO=11;
 SELECT * FROM BOARD;
---��۾���
+--��۾���?
 UPDATE BOARD SET BSTEP = BSTEP+1
     WHERE BGROUP = 10 AND BSTEP>0;
 INSERT INTO BOARD (BNO,MEMAIL,BTITLE,BCONTENT,BIMAGE,BGROUP,BIP,BSTEP,BINDENT)VALUES(BOARD_SEQ.NEXTVAL,'test@test','TITLE','CONTENT','Desert.jpg',10,'1.1.1.1',1,1);
@@ -264,3 +263,10 @@ SELECT P.*,A.GNO,A.PAY FROM PROJECT P,(SELECT ROWNUM RN, G.* FROM MEMBER M , GET
 select * from getproject where gno=7;
 
 DELETE FROM GETPROJECT WHERE GNO=6;
+
+
+--check admin
+INSERT INTO ADMIN VALUES('admin@admin','admin');
+commit;
+SELECT * FROM ADMIN WHERE AID ='ADMIN' AND APW='ADMIN' ;
+
